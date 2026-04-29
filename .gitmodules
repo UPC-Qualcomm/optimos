@@ -1,0 +1,3 @@
+[submodule "astra-sim"]
+	path = astra-sim
+	url = git@github.com:UPC-Qualcomm/astra-sim-opt.git
