@@ -1,0 +1,62 @@
+{
+  "_comment": "Default power configuration for NVIDIA H100 SXM5 systems with NVLink / InfiniBand Fat-Tree fabric.",
+  "_references": {
+    "gpu":      "NVIDIA H100 SXM5: 700 W TDP (DS-10328-001_v1.1, 2023)",
+    "nvswitch": "NVSwitch 3.0 (Hopper): 900 W / 144 NVLink 4.0 ports → 6.25 W/port  (NVIDIA Hot Chips 34, 2022)",
+    "tor":      "Arista 7050CX3-32S (32×100GbE QSFP28): 230 W / 64 ports → 3.59 W/port  (7050CX3-32S DS, 2021)",
+    "nic":      "NVIDIA ConnectX-7 400G NDR (MCX755106AS-HEAT): ~35 W / 4 lanes → 8.8 W/port  (ConnectX-7 DS, 2022)",
+    "per_npu":  "Intra-node GPU ring/chain: estimated from NVLink 4.0 lane power budget (~1-2 W/port)"
+  },
+
+  "compute_lpm_enabled": true,
+  "comm_lpm_enabled":    true,
+
+  "gpu_peak_power":  700.0,
+  "gpu_idle_power":  100.0,
+  "gpu_sleep_power": 100.0,
+
+  "_comment_switch_power": "Provide P_max_W + P_idle_W + N_ports per switch type.  from_json() calls switch_port_power_from_datasheet() at load time to derive active/idle/sleep W/port.  Override omega_sport (default 0.1) with {type}_omega_sport if needed.  Types without datasheet entries use direct *_active/idle/sleep_power fallback.",
+
+  "_note_nvswitch": "NVSwitch 3.0 (Hopper) — NVIDIA Hot Chips 34, 2022",
+  "nvswitch_P_max_W":  50,
+  "nvswitch_P_idle_W": 20,
+  "nvswitch_N_ports":  18,
+
+  "_note_tor": "Arista 7050X4 Series https://www.arista.com/assets/data/pdf/Datasheets/7050X4-Datasheet.pdf",
+  "tor_P_max_W":  880,
+  "tor_P_idle_W":  353,
+  "tor_N_ports":   64,
+
+  "aggregation_P_max_W":  880,
+  "aggregation_P_idle_W":  353,
+  "aggregation_N_ports":   64,
+
+  "core_P_max_W":  880,
+  "core_P_idle_W":  353,
+  "core_N_ports":   64,
+
+  "_note_nic": "ConnectX-7 400G NDR MCX755106AS-HEAT — DS 2022",
+  "nic_P_max_W":  35,
+  "nic_P_idle_W":   8,
+  "nic_N_ports":    4,
+
+  "_note_per_npu": "Estimated from NVLink 4.0 short-reach lane power budget — no public datasheet",
+  "per_npu_P_max_W":  8,
+  "per_npu_P_idle_W": 2,
+  "per_npu_N_ports":  4,
+
+  "npus_per_node": 8,
+
+  "_comment_prefixes": "host_prefix identifies compute nodes.  switch_type_prefixes maps each switch-type name to its nodemap name prefix.  Extend or override for any topology (Jellyfish, Dragonfly, custom).",
+  "host_prefix": "h",
+  "switch_type_prefixes": {
+    "nvswitch":    "v",
+    "tor":         "t",
+    "aggregation": "a",
+    "core":        "c",
+    "nic":         "n",
+    "per_npu":     "p"
+  },
+
+  "_comment_degrees": "Ports per switch come from the {type}_N_ports keys above (same value used by the datasheet converter).  The power model falls back to topology-connectivity degree for any type whose N_ports is absent."
+}

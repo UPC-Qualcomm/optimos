@@ -1,0 +1,61 @@
+{
+  "_comment": "Power configuration for NVIDIA A100 SXM4 80 GB (DGX A100 / DGX SuperPOD) with FoldedClos InfiniBand fabric.",
+  "_references": {
+    "gpu":      "NVIDIA A100 SXM4 80 GB: 400 W TDP (DS-10137-001_v1.5, 2022)",
+    "nvswitch": "NVSwitch 2.0 (Ampere): 504 W / 96 NVLink 3.0 ports → 5.25 W/port  (NVSwitch 2.0 whitepaper, 2020)",
+    "tor":      "Arista 7050CX3-32S (32×100GbE QSFP28): 230 W / 64 ports → 3.59 W/port  (7050CX3-32S DS, 2021)",
+    "nic":      "NVIDIA ConnectX-6 Dx 200G HDR (MCX623106AS-CDAT): 25 W / 4 lanes → 6.25 W/port  (ConnectX-6 Dx DS, 2021)",
+    "per_npu":  "Intra-node GPU ring/chain: estimated from A100 NVLink 3.0 port power (~1 W/port)"
+  },
+
+  "compute_lpm_enabled": true,
+  "comm_lpm_enabled":    true,
+
+  "gpu_peak_power":  400.0,
+  "gpu_idle_power":   60.0,
+  "gpu_sleep_power":  15.0,
+
+  "_comment_switch_power": "Provide P_max_W + P_idle_W + N_ports per switch type.  from_json() calls switch_port_power_from_datasheet() at load time to derive active/idle/sleep W/port.  Override omega_sport (default 0.1) with {type}_omega_sport if needed.  Types without datasheet entries use direct *_active/idle/sleep_power fallback.",
+
+  "_note_nvswitch": "NVSwitch 2.0 (Ampere) — NVSwitch 2.0 whitepaper, 2020",
+  "nvswitch_P_max_W":  504,
+  "nvswitch_P_idle_W": 126,
+  "nvswitch_N_ports":   96,
+
+  "_note_tor": "Mellanox SN2700 36-port HDR InfiniBand — paper Table 2",
+  "tor_P_max_W":  180,
+  "tor_P_idle_W":  33,
+  "tor_N_ports":   36,
+
+  "aggregation_P_max_W":  180,
+  "aggregation_P_idle_W":  33,
+  "aggregation_N_ports":   36,
+
+  "core_P_max_W":  180,
+  "core_P_idle_W":  33,
+  "core_N_ports":   36,
+
+  "_note_nic": "ConnectX-6 Dx 200G HDR MCX623106AS-CDAT — DS 2021",
+  "nic_P_max_W":  25,
+  "nic_P_idle_W":   6,
+  "nic_N_ports":    4,
+
+  "_note_per_npu": "Estimated from A100 NVLink 3.0 short-reach lane power budget — no public datasheet",
+  "per_npu_P_max_W":  6,
+  "per_npu_P_idle_W": 2,
+  "per_npu_N_ports":  4,
+
+  "npus_per_node": 8,
+
+  "host_prefix": "h",
+  "switch_type_prefixes": {
+    "nvswitch":    "v",
+    "tor":         "t",
+    "aggregation": "a",
+    "core":        "c",
+    "nic":         "n",
+    "per_npu":     "p"
+  },
+
+  "_comment_degrees": "Ports per switch come from the {type}_N_ports keys above (same value used by the datasheet converter).  The power model falls back to topology-connectivity degree for any type whose N_ports is absent."
+}

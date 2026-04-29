@@ -1,0 +1,33 @@
+{   
+    "clusters": {
+        "cl1": {
+            "npu_count": 32,
+            "npus_per_dim": [8, 2, 2]
+        }
+    },
+    "parallelism_strategy": {
+        "dp": [1, 2, 4, 8, 16, 32],
+        "mp": [1, 2, 4, 8, 16, 32],
+        "sp": [1, 2, 4, 8, 16, 32],
+        "pp": [1, 2, 4, 8, 16, 32],
+        "FSDP": [1, 0]
+    },
+    "system":{
+        "scheduling-policy": ["LIFO", "FIFO"],
+        "collective-optimization": ["localBWAware", "baseline"]
+    },
+    "network": {
+        "inter-node-bw": [50, 100, 200, 400],
+        "intra-node-bw": [300, 450, 600, 900]
+    },
+    "model": {
+        "batch_size": [64]
+    },
+    "constraints": {
+        "parallelism_strategy": "dp * mp * sp * pp = npu_count",
+        "dp_max": "dp <= npu_count",
+        "mp_max": "mp <= npu_count",
+        "sp_max": "sp <= npu_count",
+        "pp_max": "pp <= npu_count"
+    }
+}

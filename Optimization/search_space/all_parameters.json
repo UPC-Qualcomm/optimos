@@ -1,0 +1,49 @@
+{   
+    "npu_count": [128],
+    "parallelism_strategy": {
+        "dp": [1, 2, 4, 8, 16],
+        "mp": [1, 2, 4, 8, 16, 32, 64, 128],
+        "sp": [1, 2, 4, 8, 16, 32, 64, 128],
+        "pp": [1, 2, 4, 8, 16, 32, 64],
+        "FSDP": [0, 1]
+    },
+    "system":{
+        "scheduling-policy": ["LIFO", "FIFO"],
+        "collective-implementation": {
+            "all-reduce": ["ring", "halvingDoubling", "direct", "doubleBinaryTree"],
+            "all-gather": ["ring", "halvingDoubling","direct", "doubleBinaryTree"],
+            "reduce-scatter": ["ring", "halvingDoubling","direct", "doubleBinaryTree"],
+            "all-to-all": ["ring", "halvingDoubling","direct", "doubleBinaryTree"]
+        },
+        "active-chunks-per-dimension": [1, 2, 4, 8, 16],
+        "preferred-dataset-splits": [1, 2, 4, 8, 16],
+        "collective-optimization": ["localBWAware", "baseline"]
+    },
+    "network": {
+        "topology": ["FoldedClos", "Dragonfly", "Torus"],
+        "inter-node-bw": [25, 50, 100, 200, 400],
+        "intra-node-bw": [300, 450, 600, 900, 1800],
+        "npus-per-node": [4, 8, 16]
+    },
+    "hardware": {
+        "local-mem-bw": [1000, 2000, 3350],
+        "local-mem-size": [24, 48, 80, 96],
+        "peak-perf": [500, 700, 900, 1100]
+    },
+    "model": {
+        "batch_size": [1024, 2048, 4096, 8192, 16384],
+        "micro_batch_size": [256, 512, 1024, 2048, 4096],
+        "mixed_precision": [0, 1],
+        "sequence_length": [512, 1024, 2048],
+        "FNN_hidden_size": [4096, 8192, 16384],
+        "num_attention_heads": [16, 32, 64],
+        "num_layers": [12, 24, 36, 48]
+    },
+    "constraints": {
+        "parallelism_strategy": "dp * mp * sp * pp = npu_count",
+        "dp_max": "dp <= npu_count",
+        "mp_max": "mp <= npu_count",
+        "sp_max": "sp <= npu_count",
+        "pp_max": "pp <= npu_count"
+    }
+}

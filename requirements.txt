@@ -1,0 +1,13 @@
+streamlit==1.45.0
+intervaltree==3.1.0
+vl-convert-python==1.7.0
+tqdm==4.67.1
+umap-learn==0.5.7
+xgboost==2.0.3
+regex==2023.12.25
+plotly==6.2.0 
+kaleido==0.2.1
+PyYAML==6.0.2
+scikit-learn==1.4.2
+deephyper==0.13.2
+catboost==1.2.10

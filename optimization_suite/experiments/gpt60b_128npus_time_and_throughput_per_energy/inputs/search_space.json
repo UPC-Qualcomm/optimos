@@ -1,0 +1,42 @@
+{   
+    "clusters": {
+        "cl1": {
+            "npu_count": 64,
+            "npus_per_dim": [8, 2, 2, 2]
+        },
+        "cl2": {
+            "npu_count": 128,
+            "npus_per_dim": [8, 2, 2, 4]
+        },
+        "cl3": {
+            "npu_count": 256,
+            "npus_per_dim": [8, 4, 4, 2]
+        }
+    },
+    "parallelism_strategy": {
+        "dp": [1, 2, 4, 8, 16, 32, 64, 128, 256],
+        "mp": [1, 2, 4, 8, 16, 32, 64, 128, 256],
+        "sp": [1, 2, 4, 8, 16, 32, 64, 128, 256],
+        "pp": [1, 2, 4, 8, 16, 32],
+        "FSDP": [0, 1]
+    },
+    "system":{
+        "collective-optimization": ["localBWAware", "baseline"],
+        "active-chunks-per-dimension": [1, 2, 4, 8],
+        "preferred-dataset-splits": [1, 2, 4]
+    },
+    "network": {
+        "inter-node-bw": [200],
+        "intra-node-bw": [900]
+    },
+    "model": {
+        "batch_size": {"min": 1, "max": 8, "step": 1}
+    },
+    "constraints": {
+        "parallelism_strategy": "dp * mp * sp * pp = npu_count",
+        "dp_max": "dp <= npu_count",
+        "mp_max": "mp <= npu_count",
+        "sp_max": "sp <= npu_count",
+        "pp_max": "pp <= npu_count"
+    }
+}

@@ -1,0 +1,6 @@
+topology: [ Switch, Switch, Switch]
+npus_count: [ 8, 2, 2 ]
+bandwidth: [ 900.0, 200.0, 200.0 ]  # GB/s
+latency: [ 0.0, 0.0 , 0.0]  # ns
+packet_size: 0  # in bytes
+header_size: 0   # in bytes

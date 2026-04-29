@@ -1,0 +1,18 @@
+{
+    "scheduling-policy": "LIFO",
+    "endpoint-delay": 10,
+    "active-chunks-per-dimension": 1,
+    "preferred-dataset-splits": 4,
+    "all-reduce-implementation": ["direct", "direct", "direct"],
+    "all-gather-implementation": ["direct", "direct", "direct"],
+    "reduce-scatter-implementation": ["direct", "direct", "direct"],
+    "all-to-all-implementation": ["direct", "direct", "direct"],
+    "collective-optimization": "localBWAware",
+    "local-mem-bw": 3350,
+    "local-mem-size": 80,
+    "enable_network_logger": 0,
+    "boost-mode": 0,
+    "peak-perf": 989,
+    "roofline-enabled": 1,
+    "trace-enabled": 1
+}

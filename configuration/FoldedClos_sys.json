@@ -1,0 +1,21 @@
+{
+    "scheduling-policy": "LIFO",
+    "endpoint-delay": 10,
+    "active-chunks-per-dimension": 1,
+    "preferred-dataset-splits": 1,
+    "all-reduce-implementation": ["halvingDoubling", "halvingDoubling", "halvingDoubling"],
+    "all-gather-implementation": ["halvingDoubling", "halvingDoubling", "halvingDoubling"],
+    "reduce-scatter-implementation": ["halvingDoubling", "halvingDoubling", "halvingDoubling"],
+    "all-to-all-implementation": ["halvingDoubling", "halvingDoubling", "halvingDoubling"],
+    "collective-optimization": "localBWAware",
+    "sync_mode": "BARRIER",
+    "local-mem-bw": 3350,
+    "local-mem-size": 80,
+    "enable_network_logger": 0,
+    "boost-mode": 0,
+    "peak-perf": 989,
+    "roofline-enabled": 1,
+    "trace-enabled": 1,
+    "track-local-mem": 1,
+    "dump-local-mem-trace": 0
+}
