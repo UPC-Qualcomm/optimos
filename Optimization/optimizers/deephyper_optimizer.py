@@ -34,6 +34,15 @@ except ImportError:
 # since DeepHyper maximises and a very large negative score is "worst".
 PENALTY = -1e20
 
+class ConstrainedRandomSearch(RandomSearch):
+    """RandomSearch variant that respects HpProblem constraints and sampling_fn."""
+
+    def _ask(self, n: int = 1) -> list[dict[str, Optional[str | int | float]]]:
+        # Reuse the same constrained HpProblem sampling path as CBO.
+        # This keeps random search and Bayesian optimization aligned on
+        # constraint handling and custom sampling_fn behavior.
+        return self._problem.sample(size=n)
+
 
 def _deephyper_evaluate_wrapper(job, optimizer_state):
     """Wrapper for DeepHyper evaluation. Returns objective value or 'F' for failures."""
@@ -1159,10 +1168,9 @@ class DeepHyperOptimizer(BaseOptimizer):
     def _create_random_search(self) -> RandomSearch:
         """Create DeepHyper RandomSearch instance.
 
-        RandomSearch samples configurations uniformly at random from the
-        HpProblem's ConfigSpace, with constraint filtering applied via the
-        constraint_fn set on the problem.  No custom _ask override is needed
-        because the constraint function handles invalid proposals.
+        DeepHyper's built-in RandomSearch samples directly from ConfigSpace,
+        which bypasses HpProblem.constraint_fn.  Use a constrained variant so
+        random search respects the same search-space constraints as CBO.
         """
         random_args = {
             "problem": self.hp_problem,
@@ -1184,7 +1192,7 @@ class DeepHyperOptimizer(BaseOptimizer):
                 {k: v for k, v in self.cbo_kwargs.items() if k in valid_params}
             )
 
-        return RandomSearch(**random_args)
+        return ConstrainedRandomSearch(**random_args)
     
     def _recompute_pareto_efficient(self) -> None:
         """Recompute the pareto_efficient column from raw objective values.
